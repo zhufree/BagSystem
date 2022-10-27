@@ -1,41 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using LitJson;
+using System.Collections;
+using System.Collections.Generic;
 
-public class GameSaveManager : MonoBehaviour
+public static class GameSaveManager
 {
-    public Inventory inventory;
-    string savePath = "";
+    static string savePath = Application.persistentDataPath + "/game_SaveData/";
+    static string filename = "inventory.json";
 
-    void Awake() {
-        savePath = Application.persistentDataPath + "/game_SaveData/";
-    }
-    public void SaveGame() {
-        // Debug.Log(Application.persistentDataPath);
+    public static void SaveGame() {
         if (!Directory.Exists(savePath)) {
             Directory.CreateDirectory(savePath);
         }
 
-        BinaryFormatter formatter = new BinaryFormatter();
-        
-        FileStream file = File.Create(savePath + "inventory.txt");
+        var inventory = InventoryManager.instance.playerBag;
+        // FileStream file = File.Create(savePath + "inventory.json");
+        var json = JsonMapper.ToJson(inventory.ToSaveData());
 
-        var json = JsonUtility.ToJson(inventory);
-        
-        formatter.Serialize(file, json);
+        File.WriteAllText(savePath + filename, json);
 
-        file.Close();
+        // file.Close();
     }
-    public void LoadGame() {
-        BinaryFormatter bf = new BinaryFormatter();
-        if (File.Exists(savePath + "inventory.txt")) {
-            Debug.Log("load");
-            FileStream file = File.Open(savePath + "inventory.txt", FileMode.Open);
-            JsonUtility.FromJsonOverwrite((string)bf.Deserialize(file), inventory);
 
-            file.Close();
+    public static void LoadGame() {
+        var inventory = InventoryManager.instance.playerBag;
+        if (File.Exists(savePath + filename)) {
+            string json = File.ReadAllText(savePath + filename);
+            var dataList = JsonMapper.ToObject<List<ItemData>>(json);
+            InventoryManager.LoadSaveData(dataList);
         }
     }
 }
