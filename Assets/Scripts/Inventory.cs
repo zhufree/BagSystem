@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Inventory {
     public List<Item> itemList = new List<Item>();
-    int size = 8;
     int itemCount = 0;
 
     public void AddItem(Item item) {
@@ -16,7 +15,7 @@ public class Inventory {
                 break;
             }
         }
-        if (needAddItem && itemList.Count < size) {
+        if (needAddItem) {
             itemList.Add(item);
         }
     }
