@@ -15,8 +15,8 @@ public class Slot : MonoBehaviour
     public TMP_Text slotCount;
 
     public void SetItem(Item item) {
+        slotItem = item;
         if (item != null) {
-            slotItem = item;
             slotBg.sprite = unSelectedBg;
             slotImage.sprite = item.itemImage;
             slotName.text = item.itemName;
@@ -39,5 +39,17 @@ public class Slot : MonoBehaviour
 
     public void ItemOnClicked() {
         InventoryManager.SelectItem(slotItem);
+    }
+    
+    public void onSelect(bool select) {
+        slotImage.GetComponent<Draggable>().setSelect(select);
+    }
+
+    public bool isDragging() {
+        return slotImage.GetComponent<Draggable>().dragging;
+    }
+
+    public void useItem() {
+        SetItem(null);
     }
 }

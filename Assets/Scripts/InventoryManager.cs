@@ -10,6 +10,7 @@ public class InventoryManager : MonoBehaviour {
     public Image canvasBg;
     public GameObject myBag; // canvas下的bag game object UI
     public GameObject slotGrid; // 放物品的网格game Object UI
+    public GameObject slotPanel;
     public GameObject operationPanel;
     public TMP_Text itemName;
     public TMP_Text itemInformation;
@@ -46,6 +47,20 @@ public class InventoryManager : MonoBehaviour {
     void Update()
     {
         // OpenBag();
+        if (isDragging()) {
+            slotPanel.GetComponent<ScrollRect>().horizontal = false;
+        } else {
+            slotPanel.GetComponent<ScrollRect>().horizontal = true;
+        }
+    }
+
+    public bool isDragging() {
+        for (int i = 0; i < instance.slotList.Count; i++) {
+            if (instance.slotList[i].isDragging()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void OpenBag() {
@@ -85,6 +100,9 @@ public class InventoryManager : MonoBehaviour {
                     new Vector2(instance.slotList[i].GetComponent<Transform>().position.x, instance.operationPanelTransform.position.y);
                 instance.slotList[i].SetBg(true);
                 showOperationPanel = true;
+                instance.slotList[i].onSelect(true);
+            } else {
+                instance.slotList[i].onSelect(false);
             }
         }
         if (!showOperationPanel) {
@@ -127,5 +145,9 @@ public class InventoryManager : MonoBehaviour {
             instance.selectedItem = null;
         }
         InventoryManager.RefreshItem();
+    }
+
+    public static void UseItem() {
+        InventoryManager.DropItem();
     }
 }

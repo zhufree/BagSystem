@@ -512,12 +512,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6862293258425947361}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4eaf3b06c3c3b1b4c98d877854f5f1ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rawParent: {fileID: 5196915942341048244}
+  isSelect: 0
 --- !u!61 &7587818058857413388
 BoxCollider2D:
   m_ObjectHideFlags: 0
